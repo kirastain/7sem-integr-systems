@@ -93,6 +93,7 @@ void Menu()
     case 0:
     {
         Message::Send(M_BROKER, M_EXIT);
+        cout << "You are successfully disconnected\n";
         break;
     }
     default:
