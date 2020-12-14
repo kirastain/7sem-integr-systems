@@ -19,7 +19,7 @@ void ProcessMessages()
         {
         case M_DATA:
         {
-            cout << "\nMessage from: " << m.m_ClientID << endl;
+            cout << "\nMessage from: " << m.m_Header.m_From << endl;
             cout << m.m_Data << endl;
             break;
         }
@@ -87,7 +87,7 @@ void Menu()
         cout << "\nWrite message: ";
         string s;
         getline(cin, s, '\n');
-        Message::Send(M_ALL, M_DATA, s);
+        Message::Send(recieverId, M_DATA, s);
         break;
     }
     case 0:

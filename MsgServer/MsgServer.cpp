@@ -15,6 +15,7 @@ using namespace std;
 
 int gMaxID = M_USER;
 map<int, shared_ptr<Session>> gSessions;
+std::chrono::system_clock::time_point minTime = std::chrono::system_clock::now();
 
 void Timeout()
 {
@@ -22,7 +23,7 @@ void Timeout()
     {
         for (map<int, shared_ptr<Session>>::iterator it = gSessions.begin(); it != gSessions.end();)
         {
-            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() -it->second->lastActivityTime).count() > 10000)
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - it->second->lastActivityTime).count() > 10000)
             {
                 cout << "User " << it->first<< " left" << endl;
                 it = gSessions.erase(it);
@@ -57,8 +58,7 @@ void ProcessClient(SOCKET hSock)
         }
         case M_EXIT:
         {
-            gSessions.find(m.m_Header.m_From)->second->lastActivityTime = std::chrono::system_clock::now();
-            gSessions.erase(m.m_Header.m_From);
+            gSessions.find(m.m_Header.m_From)->second->lastActivityTime = minTime;
             Message::Send(s, m.m_Header.m_From, M_BROKER, M_CONFIRM);
             return;
         }
@@ -78,12 +78,12 @@ void ProcessClient(SOCKET hSock)
             {
                 if (gSessions.find(m.m_Header.m_To) != gSessions.end())
                 {
-                    cout << "Message to " << m.m_Header.m_To << " from " << m.m_Header.m_From << endl;
+                    cout << "Message from " << m.m_Header.m_From << " to one " << m.m_Header.m_To << endl;
                     gSessions[m.m_Header.m_To]->Add(m);
                 }
                 else if (m.m_Header.m_To == M_ALL)
                 {
-                    cout << "Message to all from " << m.m_Header.m_From << endl;
+                    cout << "Message from " << m.m_Header.m_From << " to all" << endl;
                     for (auto& gSession : gSessions)
                     {
                         if (gSession.first != m.m_Header.m_From)
