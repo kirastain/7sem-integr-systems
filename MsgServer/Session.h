@@ -8,10 +8,16 @@ struct Session
 
 	queue<Message> m_Messages;
 	CCriticalSection m_CS;
+	CCriticalSection s_CS;
 
 	Session(int ID, string Name)
 		:m_ID(ID), m_Name(Name)
 	{
+	}
+
+	void Erase()
+	{
+		CSingleLock s2(&s_CS, TRUE);
 	}
 
 	void Add(Message& m)

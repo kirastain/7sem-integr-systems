@@ -16,13 +16,16 @@ using namespace std;
 int gMaxID = M_USER;
 map<int, shared_ptr<Session>> gSessions;
 std::chrono::system_clock::time_point minTime = std::chrono::system_clock::now();
+CCriticalSection s_CS;
 
 void Timeout()
 {
     while (true)
     {
+        CSingleLock(&s_CS, TRUE);
         for (map<int, shared_ptr<Session>>::iterator it = gSessions.begin(); it != gSessions.end();)
         {
+     
             if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - it->second->lastActivityTime).count() > 10000)
             {
                 cout << "User " << it->first<< " left" << endl;
@@ -43,13 +46,13 @@ void ProcessClient(SOCKET hSock)
     s.Attach(hSock);
     Message m;
 
-//    while (true)
     {
         int nCode = m.Receive(s);
         switch (nCode)
         {
         case M_INIT:
         {
+            CSingleLock(&s_CS, TRUE);
             auto pSession = make_shared<Session>(++gMaxID, m.m_Data);
             pSession->lastActivityTime = std::chrono::system_clock::now();
             gSessions[pSession->m_ID] = pSession;
@@ -58,12 +61,14 @@ void ProcessClient(SOCKET hSock)
         }
         case M_EXIT:
         {
+            CSingleLock(&s_CS, TRUE);
             gSessions.find(m.m_Header.m_From)->second->lastActivityTime = minTime;
             Message::Send(s, m.m_Header.m_From, M_BROKER, M_CONFIRM);
             return;
         }
         case M_GETDATA:
         {
+            CSingleLock(&s_CS, TRUE);
             gSessions.find(m.m_Header.m_From)->second->lastActivityTime = std::chrono::system_clock::now();
             if (gSessions.find(m.m_Header.m_From) != gSessions.end())
             {
@@ -73,6 +78,7 @@ void ProcessClient(SOCKET hSock)
         }
         default:
         {
+            CSingleLock(&s_CS, TRUE);
             gSessions.find(m.m_Header.m_From)->second->lastActivityTime = std::chrono::system_clock::now();
             if (gSessions.find(m.m_Header.m_From) != gSessions.end())
             {

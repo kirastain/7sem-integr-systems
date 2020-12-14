@@ -45,8 +45,11 @@ void ProcessMessages()
 
 void Menu()
 {
-    cout << "Write action:" << endl;
-    cout << "\n1.Connect to Server \n2.Send global message(only if connected) \n3.Send message to certain user(only if connected) \n0. Exit program " << endl;
+    cout << "Write action:\n" << endl;
+    cout << "1.Connection to Server \n" <<
+                "2. Message to all\n" <<
+                "3. Message to ID\n" <<
+                "0. Exit" << endl;
     int actionId;
     cin >> actionId;
     switch (actionId)
