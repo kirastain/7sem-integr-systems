@@ -1,0 +1,11 @@
+D:\RGU\Dan\MsgServer\x64\Debug\SocketSharp.exe.config
+D:\RGU\Dan\MsgServer\x64\Debug\SocketSharp.exe
+D:\RGU\Dan\MsgServer\x64\Debug\SocketSharp.pdb
+D:\RGU\Dan\MsgServer\SocketSharp\obj\Debug\SocketSharp.exe
+D:\RGU\Dan\MsgServer\SocketSharp\obj\Debug\SocketSharp.pdb
+D:\RGU\TRIS\MsgServer\x64\Debug\SocketSharp.exe.config
+D:\RGU\TRIS\MsgServer\x64\Debug\SocketSharp.exe
+D:\RGU\TRIS\MsgServer\x64\Debug\SocketSharp.pdb
+D:\RGU\TRIS\MsgServer\SocketSharp\obj\Debug\SocketSharp.csprojAssemblyReference.cache
+D:\RGU\TRIS\MsgServer\SocketSharp\obj\Debug\SocketSharp.exe
+D:\RGU\TRIS\MsgServer\SocketSharp\obj\Debug\SocketSharp.pdb
